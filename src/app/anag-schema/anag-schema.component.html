@@ -1,0 +1,160 @@
+<!-- icone usate : https://useiconic.com/open -->
+
+<div class="mx-auto" style="width: 100%; padding-top: 1%;">
+    <div class="container-fluid">
+
+        <p *ngFor="let alert of alerts">
+            <ngb-alert [type]="alert.type" (close)="onCloseAlert(alert)">{{ alert.message }}</ngb-alert>
+        </p>
+
+        <div class="container">
+
+            <div class="row">
+
+                <div *ngIf="!formActive" class="col-sm">
+                    <h3>Schemi gestiti</h3>
+                    <table class="table">
+                        <thead>
+                            <tr class="d-flex">
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="id" class="col-1">#</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="name" class="col-5">Name</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="type" class="col-1">Type</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="active" class="col-1">Active</th>
+                                <th scope="col" class="col-2">Json</th>
+                                <th scope="col" class="col-1"></th>
+                                <th scope="col" class="col-1"></th>
+                                <th scope="col" class="col-1"><span role="button" (click)="onInsertForm()"
+                                        _ngcontent-xtg-c18="" data-glyph="plus" class="oi" data-toggle="tooltip" title="insert"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="d-flex" *ngFor="let item of resultSet | slice:p_start:p_end">
+                                <th scope="row" class="col-1">{{item.id}}</th>
+                                <td class="col-5">{{item.name}}</td>
+                                <td class="col-1">{{item.type}}</td>
+                                <td class="col-1">{{item.active}}</td>
+                                <td class="col-2">
+                                    <ngx-json-view [data]="toObj(item.json_form)" [expanded]="false"></ngx-json-view>
+                                </td>
+                                <td class="col-1"><span role="button" (click)="onDetailForm(item.id)"
+                                        _ngcontent-xtg-c18="" data-glyph="pencil" class="oi" data-toggle="tooltip" title="edit"></span></td>
+                                <td class="col-1"><span role="button" (click)="onCloneForm(item.id)"
+                                        _ngcontent-xtg-c18="" class="oi" data-glyph="fork" data-toggle="tooltip" title="clone"></span></td>
+                                        
+                                        <td *ngIf="this.deletableId.indexOf(item.id)>=0" style="color:#bebebe" class="col-1"><span role="button"
+                                            _ngcontent-xtg-c18="" data-glyph="trash" class="oi" data-toggle="tooltip" 
+                                            title="Schema in use!"></span></td>
+                                        <td *ngIf="this.deletableId.indexOf(item.id)<0" class="col-1"><span role="button" (click)="onDeleteForm(item.id)"
+                                            _ngcontent-xtg-c18="" data-glyph="trash" class="oi" data-toggle="tooltip" 
+                                            title="delete"></span></td>
+                                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-between p-2">
+                        <ngb-pagination [collectionSize]="resultSet.length" [(page)]="page" [pageSize]="pageSize"
+                            (pageChange)="refreshList()"></ngb-pagination>
+
+                        <select class="custom-select" style="width: auto" [(ngModel)]="pageSize"
+                            (ngModelChange)="refreshList()">
+                            <option [ngValue]="3">3 items per page</option>
+                            <option [ngValue]="5">5 items per page</option>
+                            <option [ngValue]="10">10 items per page</option>
+                            <option [ngValue]="15">15 items per page</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div *ngIf="formActive" class="col-sm">
+                    <h3>&nbsp;</h3>
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr class="d-flex">
+                                <th scope="col" class="col-11">{{operation}}</th>
+                                <th scope="col" class="col-1"><span role="button" (click)="onBackDetailForm()"
+                                        class="oi" data-glyph="arrow-circle-left"></span></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngIf="formActive" class="d-flex">
+                                <td class="col-12">
+                                    <form [formGroup]="form" (ngSubmit)="onSubmitForm($event, operation)">
+                                        <formly-form [model]="jsonFormData" [fields]="fields" [options]="options"
+                                            [form]="form"></formly-form>
+                                        &nbsp;<button type="submit"
+                                            [disabled]="fileActive || form.invalid || innerFormActive"
+                                            class="btn btn-primary submit-button">Invio</button>
+                                        &nbsp;<button *ngIf="jsonFormData.json_form && !innerFormActive && !fileActive"
+                                            type="button" class="btn btn-secondary" (click)="onShowForm($event)">show
+                                            form</button>
+                                        &nbsp;<button *ngIf="jsonFormData.json_form && innerFormActive && !fileActive"
+                                            type="button" class="btn btn-secondary" (click)="onShowForm($event)">hide
+                                            form</button>
+                                        <span *ngIf="!(operation==='elimina')">
+                                            <button *ngIf="!fileActive && !innerFormActive" type="button"
+                                                class="btn btn-secondary" (click)="onEditSchema($event)">edit
+                                                schema</button>
+                                            <button *ngIf="fileActive && !innerFormActive" type="button"
+                                                class="btn btn-secondary" (click)="onEditSchema($event)">commit
+                                                schema</button>
+                                        </span>
+                                        <hr/>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="fileActive">
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="btn btn-dark  btn-sm mt-2">
+                                Upload Json
+                                <input type="file" id="file-button-id" (change)="onFileSelect($event)"
+                                    style="display: none" />
+                            </label>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label (click)="onFileDownload('json',false)" class="btn btn-secondary  btn-sm mt-2">
+                                Download Json
+                            </label>
+                           
+                        </div>
+                    </div>
+                    <div *ngIf="jsonFormData.type!='formly'" class="row">
+                        <div class="col-8">
+                            <label>formly-type</label>
+                        </div>
+                        <div class="col-4">    
+                            <input class="form-check-input mt-2" type="checkbox" [(ngModel)]="toFormly" [checked]="toFormly" value="" id="2formly">
+                        </div>
+                        <!--<ngx-json-view *ngIf="json_form_object" [(data)]="json_form_object"></ngx-json-view>-->           
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="shadow p-3 mb-5 bg-white rounded">
+                        <json-editor #editor [options]="editorOptions" [(data)]="editorData"></json-editor>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="formActive && innerFormActive">
+                <div class="shadow p-3 mb-5 bg-white rounded col-12">
+                    <form [formGroup]="innerForm">
+                        <formly-form [model]="innerJsonFormData" [fields]="innerFields" [options]="innerOptions"
+                            [form]="innerForm"></formly-form>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

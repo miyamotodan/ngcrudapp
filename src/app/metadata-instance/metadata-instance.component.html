@@ -1,0 +1,121 @@
+<!-- icone usate : https://useiconic.com/open -->
+
+<div class="mx-auto" style="width: 100%; padding-top: 1%;">
+    <div class="container-fluid">
+
+        <p *ngFor="let alert of alerts">
+            <ngb-alert [type]="alert.type" (close)="onCloseAlert(alert)">{{ alert.message }}</ngb-alert>
+        </p>
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-3">
+                    <div ngbDropdown class="d-inline-block">
+                        <button class="btn btn-outline-primary" id="dropdownBasic1" [disabled]="this.formActive"
+                            ngbDropdownToggle>Scegli la tabella
+                            dei metadati</button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <li *ngFor="let item of resultSet_AT; let i = index">
+                                <button (click)="setMetadataTable(item.table_name)" ngbDropdownItem>{{item.table_name}}</button>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4" *ngIf="metadataTable">
+                    <h2>{{metadataTable}}</h2>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="metadataTable">
+
+                <div *ngIf="!formActive" class="col-sm">
+                    <table class="table">
+                        <thead>
+                            <tr class="d-flex">
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="id" class="col-1">#</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="name" class="col-3">Name</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="topic" class="col-3">TPC</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="offset" class="col-1">OFS</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="partition" class="col-1">PRT</th>
+                                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="timestamp" class="col-2">TST</th>
+                                <th scope="col" class="col-1"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr class="d-flex" *ngFor="let item of resultSet | slice:p_start:p_end">
+                                <th scope="row" class="col-1">{{item.id}}</th>
+                                <td class="col-3">{{item.name}}</td>
+                                <td class="col-3">{{item.topic}}</td>
+                                <td class="col-1">{{item.offset}}</td>
+                                <td class="col-1">{{item.partition}}</td>
+                                <td class="col-2">{{item.timestamp}}</td>
+                                
+
+                                <td class="col-1"><span role="button" (click)="onDetailForm(item.id)"
+                                        _ngcontent-xtg-c18="" data-glyph="zoom-in" class="oi" data-toggle="tooltip" title="view"></span></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                    <div class="d-flex justify-content-between p-2">
+                        <ngb-pagination [collectionSize]="resultSet.length" [(page)]="page" [pageSize]="pageSize"
+                            (pageChange)="refreshList()"></ngb-pagination>
+
+                        <select class="custom-select" style="width: auto" [(ngModel)]="pageSize"
+                            (ngModelChange)="refreshList()">
+                            <option [ngValue]="3">3 items per page</option>
+                            <option [ngValue]="5">5 items per page</option>
+                            <option [ngValue]="10">10 items per page</option>
+                            <option [ngValue]="15">15 items per page</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div *ngIf="formActive" class="col-sm">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr class="d-flex">
+                                <th scope="col" class="col-11">{{operation}}</th>
+                                <th scope="col" class="col-1"><span role="button" (click)="onBackDetailForm()"
+                                        class="oi" data-glyph="arrow-circle-left"></span></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngIf="formActive" class="d-flex">
+
+                                <td class="col-12">
+
+                                    <form [formGroup]="form" (ngSubmit)="onSubmitForm($event, operation)">
+                                        <formly-form [model]="jsonFormData" [fields]="fields" [options]="options"
+                                            [form]="form"></formly-form>
+                                        &nbsp;<button type="submit" [disabled]="innerFormActive || form.invalid"
+                                            class="btn btn-primary submit-button">Invio</button>
+
+                                        &nbsp;<button *ngIf="!innerFormActive && !(operation==='elimina')" type="button" class="btn btn-secondary"
+                                            (click)="openJsonView($event)">view data</button>
+                                        &nbsp;<button *ngIf="innerFormActive && !(operation==='elimina')" type="button" class="btn btn-secondary"
+                                            (click)="openJsonView($event)">close data</button>
+                                    </form>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div *ngIf="formActive && innerFormActive && operation!='elimina'" class="row">
+                
+                        <div class="shadow p-3 mb-5 bg-white rounded col-12">
+                            <json-editor #editor [options]="editorOptions" [data]="editorData"></json-editor>
+                        </div>
+                    
+            </div>
+        </div>
+    </div>

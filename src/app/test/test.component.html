@@ -1,0 +1,81 @@
+<div class="mx-auto" style="width: 90%; padding-top: 1%;">
+    <div class="container-fluid" id="accordion">
+
+        <div class="row">
+            <div class="alert alert-warning col-12" role="alert">
+                <h4 class="alert-heading">Componente di Test</h4>
+                <hr />
+                <p>Questa pagina funge da componente di test per lo sviluppo di nuove funzionalità</p>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <ul class="nav nav-tabs col-12" id="myTab" role="tablist">
+
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link " id="code-tab" data-toggle="tab" href="#code" role="tab" aria-controls="code"
+                        aria-selected="false">Code</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form"
+                        aria-selected="false">Form</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="graph-tab" data-toggle="tab" href="#graph" role="tab"
+                        aria-controls="graph" aria-selected="true" (click)="onSelectTab()">graph</a>
+                </li>
+            </ul>
+            <div class="tab-content col-12" style="margin-top: 20px;" id="myTabContent">
+
+                <div class="tab-pane fade col-12" id="code" role="tabpanel" aria-labelledby="code-tab">
+                    <div class="shadow p-3 mb-5 bg-white rounded">
+                        <json-editor #editor [options]="editorOptions" [data]="editorData"></json-editor>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade col-12 " id="form" role="tabpanel" aria-labelledby="form-tab">
+                    <div class="shadow p-3 mb-5 bg-white rounded">
+                        <form [formGroup]="form" (ngSubmit)="submit()">
+                            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"
+                                (modelChange)="onFormChange($event)">
+                            </formly-form>
+                            <!--
+                            <button type="submit" class="btn btn-primary submit-button"
+                                [disabled]="!form.valid">Submit</button>
+                                -->
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade col-12 show active" id="graph" role="tabpanel" aria-labelledby="graph-tab">
+
+                    <div class="row">
+                       
+                        <div class="col-4">
+                            <ngx-charts-number-card [view]="view" [scheme]="colorScheme" [results]="single"
+                                [cardColor]="cardColor" (select)="onSelect($event)" [animations]="animations">
+                            </ngx-charts-number-card>
+                        </div>
+                        <div class="col-4">
+                            <ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="single"
+                                [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                                [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="animations"
+                                (select)="onSelect($event)">
+                            </ngx-charts-bar-vertical>
+                        </div>
+                        <div class="col-4">
+                            <ngx-charts-line-chart [view]="view" [scheme]="colorScheme" [legend]="showLegend"
+                                [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis"
+                                [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                                [timeline]="timeline" [results]="multi" (select)="onSelect($event)">
+                            </ngx-charts-line-chart>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

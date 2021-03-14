@@ -1,0 +1,93 @@
+<!-- icone usate : https://useiconic.com/open -->
+
+<div class="mx-auto" style="width: 100%; padding-top: 1%;">
+  <div class="container-fluid">
+
+    <p *ngFor="let alert of alerts">
+      <ngb-alert [type]="alert.type" (close)="onCloseAlert(alert)">{{ alert.message }}</ngb-alert>
+    </p>
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-sm">
+          <h3>Tabelle gestite</h3>
+          <table class="table">
+            <thead>
+              <tr class="d-flex">
+                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="id" class="col-1">#</th>
+                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="name"class="col-2">Nome</th>
+                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="surname"class="col-2">Cognome</th>
+                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="age"class="col-1">Età</th>
+                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="nick"class="col-2">Soprannome</th>
+                <th scope="col" [appSort]="resultSet" data-order="desc" data-name="email"class="col-2">Mail</th>
+                <th scope="col" class="col-1"></th>
+                <th scope="col" class="col-1"><span role="button" (click)="onInsertForm()" _ngcontent-xtg-c18=""
+                    data-glyph="plus" class="oi" data-toggle="tooltip" title="insert"></span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="d-flex" *ngFor="let item of resultSet | slice:p_start:p_end">
+                <th scope="row" class="col-1">{{item.id}}</th>
+                <td class="col-2">{{item.name}}</td>
+                <td class="col-2">{{item.surname}}</td>
+                <td class="col-1">{{item.age}}</td>                
+                <td class="col-2">{{item.nick}}</td>
+                <td class="col-2">{{item.email}}</td>
+                <td class="col-1"><span role="button" (click)="onDetailForm(item.id)" _ngcontent-xtg-c18=""
+                    data-glyph="pencil" class="oi" data-toggle="tooltip" title="edit"></span></td>
+                <td class="col-1"><span role="button" (click)="onDeleteForm(item.id)" _ngcontent-xtg-c18=""
+                    data-glyph="trash" class="oi" data-toggle="tooltip" title="delete"></span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination [collectionSize]="resultSet.length" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshList()"></ngb-pagination>
+
+            <select class="custom-select" style="width: auto" [(ngModel)]="pageSize"
+                (ngModelChange)="refreshList()">
+                <option [ngValue]="3">3 items per page</option>
+                <option [ngValue]="5">5 items per page</option>
+                <option [ngValue]="10">10 items per page</option>
+                <option [ngValue]="15">15 items per page</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div *ngIf="formActive" class="col-sm">
+          <h3>&nbsp;</h3>
+          <table class="table">
+            <thead class="thead-dark">
+              <tr class="d-flex">
+                <th scope="col" class="col-11">{{operation}}</th>
+                <th class="col-1"><span role="button" (click)="onBackDetailForm()" class="oi"
+                    data-glyph="arrow-circle-left"></span></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngIf="formActive" class="d-flex">
+                <td class="col-12">
+
+                  <form [formGroup]="form" (ngSubmit)="onSubmitForm($event, operation)">
+                    <formly-form [model]="jsonFormData" [fields]="fields" [options]="options" [form]="form"></formly-form>
+                    &nbsp;<button type="submit" [disabled]="form.invalid" class="btn btn-primary submit-button">Invio</button>
+                    <!--&nbsp;<button *ngIf="operation!='elimina'" type="button" class="btn btn-secondary" (click)="options.resetModel()">Reset</button>-->
+                  </form>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

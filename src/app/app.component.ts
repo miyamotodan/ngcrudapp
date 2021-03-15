@@ -7,7 +7,7 @@ import { ConfigLoaderService } from './config/appconfig.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'jformapp';
+  title = 'ngcrudapp';
 
   constructor(private configLoaderService: ConfigLoaderService) {
   }

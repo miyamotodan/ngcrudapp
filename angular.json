@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "jformapp": {
+    "ngcrudapp": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/jformapp",
+            "outputPath": "dist/ngcrudapp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,18 +66,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "jformapp:build"
+            "browserTarget": "ngcrudapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "jformapp:build:production"
+              "browserTarget": "ngcrudapp:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "jformapp:build"
+            "browserTarget": "ngcrudapp:build"
           }
         },
         "test": {
@@ -118,16 +118,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "jformapp:serve"
+            "devServerTarget": "ngcrudapp:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "jformapp:serve:production"
+              "devServerTarget": "ngcrudapp:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "jformapp"
+  "defaultProject": "ngcrudapp"
 }

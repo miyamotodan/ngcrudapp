@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'jformapp'`, () => {
+  it(`should have as title 'ngcrudapp'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('jformapp');
+    expect(app.title).toEqual('ngcrudapp');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('jformapp app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('ngcrudapp app is running!');
   });
 });

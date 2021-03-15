@@ -10,9 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from './dialog/dialog.component';
 import { AlertComponent } from './alert/alert.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AnagSchemaComponent } from './anag-schema/anag-schema.component';
 import { HomeComponent } from './home/home.component';
-import { MetadataComponent } from './metadata/metadata.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormlyModule, FormlyFieldConfig } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
@@ -30,7 +28,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { PreloadFactory } from "./config/preload-service.factory";
 import { ConfigLoaderService } from './config/appconfig.service';
-import { MetadataInstanceComponent } from './metadata-instance/metadata-instance.component';
 
 export function minItemsValidationMessage(err, field: FormlyFieldConfig) {
   return `should NOT have fewer than ${field.templateOptions.minItems} items`;
@@ -79,16 +76,13 @@ export function constValidationMessage(err, field: FormlyFieldConfig) {
     AboutComponent,
     DialogComponent,
     AlertComponent,
-    AnagSchemaComponent,
     HomeComponent,
-    MetadataComponent,
     TestComponent,
     ArrayTypeComponent,
     ObjectTypeComponent,
     MultiSchemaTypeComponent,
     NullTypeComponent,
-    SortDirective,
-    MetadataInstanceComponent
+    SortDirective
   ],
   imports: [
     CommonModule,

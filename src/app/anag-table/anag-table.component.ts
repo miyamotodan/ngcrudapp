@@ -39,11 +39,10 @@ export class AnagTableComponent implements OnInit {
     {
       key: 'id',
       type: 'input',
-      defaultValue: 0,
+      defaultValue: '0',
       templateOptions: {
         label: 'id',
-        type: 'number',
-        min: 0,
+        type: 'string',
         required: true,
         description: 'id univoco'
       }
